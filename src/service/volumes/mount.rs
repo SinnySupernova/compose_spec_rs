@@ -12,7 +12,11 @@ use std::{
 
 use serde::{Deserialize, Serialize};
 
-use crate::{service::ByteValue, Extensions, Identifier};
+use crate::{
+    serde::bool::{default_true, is_true},
+    service::ByteValue,
+    Extensions, Identifier,
+};
 
 use super::{AbsolutePath, HostPath, SELinux, ShortOptions, ShortVolume};
 
@@ -458,8 +462,8 @@ pub struct BindOptions {
 
     /// Whether to create a directory at the source path on the host if it does not exist.
     ///
-    /// Automatically implied by the [`ShortVolume`] syntax.
-    #[serde(default, skip_serializing_if = "Not::not")]
+    /// Defaults to `true`.
+    #[serde(default = "default_true", skip_serializing_if = "is_true")]
     pub create_host_path: bool,
 
     /// Whether to use SELinux relabeling on the `source`'s contents.
