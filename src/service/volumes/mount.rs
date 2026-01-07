@@ -454,7 +454,7 @@ impl From<(HostPath, Common)> for Bind {
 /// Additional [`Bind`] [`Mount`] options.
 ///
 /// [compose-spec](https://github.com/compose-spec/compose-spec/blob/master/05-services.md#long-syntax-5)
-#[derive(Serialize, Deserialize, Debug, Default, Clone, Eq)]
+#[derive(Serialize, Deserialize, Debug, Clone, Eq)]
 pub struct BindOptions {
     /// Propagation mode used for the bind mount.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -475,6 +475,17 @@ pub struct BindOptions {
     /// [compose-spec](https://github.com/compose-spec/compose-spec/blob/master/11-extension.md)
     #[serde(flatten)]
     pub extensions: Extensions,
+}
+
+impl Default for BindOptions {
+    fn default() -> Self {
+        Self {
+            propagation: Default::default(),
+            create_host_path: true,
+            selinux: Default::default(),
+            extensions: Default::default(),
+        }
+    }
 }
 
 impl From<Option<BindPropagation>> for BindOptions {
